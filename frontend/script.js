@@ -16,7 +16,7 @@ function clearError(input) {
   input.classList.remove("error-border");
 }
 
-signUpForm.addEventListener("submit", (e) => {
+signUpForm.addEventListener("submit", async(e) => {
   e.preventDefault();
 
   const username = document.getElementById("username");
@@ -63,12 +63,21 @@ signUpForm.addEventListener("submit", (e) => {
     clearError(confirmPassword);
   }
 
-  if (isValid) {
-    console.log("Sign-Up Successful!");
-    console.log({
-      username: username.value,
-      email: email.value,
-      password: password.value,
+  const obj = {
+    name: username.value,
+    email: email.value,
+    password: password.value,
+  }
+  if (isValid){
+    await axios.post("http://localhost:3000/signup", obj)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response.data);
+      if(err.response.data === "ER_DUP_ENTRY"){
+        showError(email, "Email already exists.");
+      }
     });
   }
 });
