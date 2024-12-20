@@ -16,7 +16,7 @@ function clearError(input) {
   input.classList.remove("error-border");
 }
 
-signUpForm.addEventListener("submit", async(e) => {
+signUpForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const username = document.getElementById("username");
@@ -68,15 +68,15 @@ signUpForm.addEventListener("submit", async(e) => {
     email: email.value,
     password: password.value,
   }
-  if (isValid){
+  if (isValid) {
     await axios.post("http://localhost:3000/signup", obj)
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      if(err.response.data === "ER_DUP_ENTRY"){
-        showError(email, "Email already exists.");
-      }
-    });
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        if (err.response.data === "ER_DUP_ENTRY") {
+          showError(email, "Email already exists.");
+        }
+      });
   }
 });

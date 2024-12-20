@@ -1,6 +1,5 @@
 const loginForm = document.getElementById("loginForm");
 
-// Helper function to show error
 function showError(input, message) {
     const inputGroup = input.parentElement;
     const errorMessage = inputGroup.querySelector(".error-message");
@@ -9,7 +8,6 @@ function showError(input, message) {
     input.classList.add("error-border");
 }
 
-// Helper function to clear error
 function clearError(input) {
     const inputGroup = input.parentElement;
     const errorMessage = inputGroup.querySelector(".error-message");
@@ -18,16 +16,14 @@ function clearError(input) {
     input.classList.remove("error-border");
 }
 
-// Form validation function
 async function validateLoginForm(e) {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
 
     const email = document.getElementById("email");
     const password = document.getElementById("password");
 
     let isValid = true;
 
-    // Email validation
     if (email.value.trim() === "") {
         showError(email, "Email is required.");
         isValid = false;
@@ -38,7 +34,6 @@ async function validateLoginForm(e) {
         clearError(email);
     }
 
-    // Password validation
     if (password.value.trim() === "") {
         showError(password, "Password is required.");
         isValid = false;
@@ -67,5 +62,4 @@ async function validateLoginForm(e) {
     }
 }
 
-// Attach event listener to the form
 loginForm.addEventListener("submit", validateLoginForm);
