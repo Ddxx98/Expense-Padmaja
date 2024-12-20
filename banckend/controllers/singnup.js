@@ -10,6 +10,6 @@ exports.createUser = (req, res, next) => {
         console.log(result);
         res.status(201).json({ message: "User Created" });
     }).catch(err => {
-        res.status(501).json(err.original.code);
+        res.status(500).json(err.original.code);
     });
 }

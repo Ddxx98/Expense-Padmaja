@@ -74,7 +74,6 @@ signUpForm.addEventListener("submit", async(e) => {
       console.log(res.data);
     })
     .catch((err) => {
-      console.log(err.response.data);
       if(err.response.data === "ER_DUP_ENTRY"){
         showError(email, "Email already exists.");
       }
