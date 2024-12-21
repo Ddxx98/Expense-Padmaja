@@ -49,6 +49,8 @@ async function validateLoginForm(e) {
         await axios.post("http://localhost:3000/login", obj)
             .then((res) => {
                 console.log(res.data);
+                window.localStorage.setItem("userId", res.data.result.id);
+                window.location.href = "http://127.0.0.1:5500/frontend/expense.html";
             })
             .catch((err) => {
                 if (err.response.status === 404) {

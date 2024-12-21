@@ -1,4 +1,3 @@
-const { where } = require('sequelize');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
