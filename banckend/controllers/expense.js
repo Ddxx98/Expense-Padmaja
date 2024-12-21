@@ -1,8 +1,8 @@
 const Expense = require('../models/expense');
 
 exports.createExpense = (req, res) => {
-    const { description, category, amount, userId } = req.body;
-    Expense.create({ description, category, amount, userId }).then(result => {
+    const { description, category, amount } = req.body;
+    Expense.create({ description, category, amount, userId:req.user.id }).then(result => {
         return res.status(201).json({ message: "Expense created", result });
     }).catch(err => {
         return res.status(500).json(err);
@@ -10,7 +10,7 @@ exports.createExpense = (req, res) => {
 }
 
 exports.getExpenses = (req, res) => {
-    Expense.findAll({where:{userId:req.params.userId}}).then(result => {
+    Expense.findAll({where:{userId:req.user.id}}).then(result => {
         return res.status(200).json(result);
     }).catch(err => {
         return res.status(500).json(err);

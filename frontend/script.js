@@ -72,6 +72,7 @@ signUpForm.addEventListener("submit", async (e) => {
     await axios.post("http://localhost:3000/signup", obj)
       .then((res) => {
         console.log(res.data);
+        window.location.href = '../frontend/login.html';
       })
       .catch((err) => {
         if (err.response.data === "ER_DUP_ENTRY") {
