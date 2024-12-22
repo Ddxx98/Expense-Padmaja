@@ -1,16 +1,12 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const jwt = require('../util/jwt');
 
 function verifyPassword(password, hashedPassword) {
     return bcrypt.compareSync(password, hashedPassword);
 }
 
-function generateToken(user) {
-    return jwt.sign({ id: user.id, email: user.email }, "deexith2024");
-}
-
-exports.loginUser = (req, res, next) => {
+exports.loginUser = (req, res) => {
     const { email, password } = req.body;
     User.findOne({ where:{ email: email}}).then(result => {
         if (!result) {
@@ -18,8 +14,8 @@ exports.loginUser = (req, res, next) => {
         } else if(!verifyPassword(password, result.password)) {
             return res.status(401).json({ message: "User not authorized" });
         }
-        return res.status(200).json({message:"User login sucessful",token: generateToken(result) });
+        return res.status(200).json({message:"User login sucessful",token: jwt.generateToken(result), isPremium: result.isPremium});
     }).catch(err => {
-        return res.status(500).json(err.original.code);
+        return res.status(500).json(err);
     });
 }

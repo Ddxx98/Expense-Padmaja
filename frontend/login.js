@@ -49,6 +49,7 @@ async function validateLoginForm(e) {
         await axios.post("http://localhost:3000/login", obj)
             .then((res) => {
                 console.log(res.data);
+                window.localStorage.setItem("status", res.data.isPremium);
                 window.localStorage.setItem("token", res.data.token);
                 window.location.href = "../frontend/expense.html";
             })

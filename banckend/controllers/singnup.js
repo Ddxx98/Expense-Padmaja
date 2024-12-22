@@ -19,3 +19,12 @@ exports.createUser = (req, res, next) => {
         res.status(500).json(err.original.code);
     });
 }
+
+exports.updateUserpremium = (req, res, next) => {
+    const { id } = req.user;
+    User.update({ isPremium: true }, { where: { id } }).then(result => {
+        res.status(200).json({ message: "User updated" });
+    }).catch(err => {
+        res.status(500).json(err);
+    });
+}
