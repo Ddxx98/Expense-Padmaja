@@ -1,7 +1,9 @@
+const sequelize = require('../util/database');
+
 const Expense = require('../models/expense');
 const User = require('../models/user');
 
-exports.createExpense = (req, res) => {
+exports.createExpense = async (req, res) => {
     const { description, category, amount } = req.body;
     // const user = User.findOne({ where: { id: req.user.id } });
     // console.log(user);
@@ -14,14 +16,16 @@ exports.createExpense = (req, res) => {
     // }).catch(err => {
     //     return res.status(500).json(err);
     // });
+    const t = await sequelize.transaction();
     try{
-        User.findOne({ where: { id: req.user.id } }).then(user => {
-            User.update({ totalExpense: Number(user.totalExpense) + Number(amount) }, { where: { id: req.user.id } }).then(result =>{});
+        User.findOne({ where: { id: req.user.id }, transaction: t,}).then(user => {
+            User.update({ totalExpense: Number(user.totalExpense) + Number(amount) }, { where: { id: req.user.id } }).then(async result =>{await t.commit();});
         });
         Expense.create({ description, category, amount, userId:req.user.id }).then(result => {
             return res.status(201).json({ message: "Expense created", result });
         });
     } catch(err){
+        await t.rollback();
         return res.status(500).json(err);
     }
 }
