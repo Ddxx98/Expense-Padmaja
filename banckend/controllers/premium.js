@@ -57,17 +57,18 @@ exports.showLeaderboard = async (req, res) => {
         //     })
         // );
         // leaderboardData.sort((a, b) => b.totalExpense - a.totalExpense);
-        const leaderboardData = await User.findAll({
-            attributes: ['id', 'name',  [Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('Expenses.amount')), 0), 'totalExpense']],
-            include: [
-                {
-                    model: Expense,
-                    attributes: [],
-                },
-            ],
-            group: ['User.id'], 
-            order: [['totalExpense', 'DESC']],
-        });
+        // const leaderboardData = await User.findAll({
+        //     attributes: ['id', 'name',  [Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('Expenses.amount')), 0), 'totalExpense']],
+        //     include: [
+        //         {
+        //             model: Expense,
+        //             attributes: [],
+        //         },
+        //     ],
+        //     group: ['User.id'], 
+        //     order: [['totalExpense', 'DESC']],
+        // });
+        const leaderboardData = await User.findAll({ order: [['totalExpense', 'DESC']] });
         res.status(200).json(leaderboardData);
     } catch (err) {
         res.status(500).json({ error: err.message });
