@@ -1,4 +1,5 @@
 const razorpay = require('razorpay');
+const Sequelize = require('sequelize');
 
 const Order = require('../models/order');
 const User = require('../models/user');
@@ -47,15 +48,26 @@ exports.updateOrder = (req, res) => {
 
 exports.showLeaderboard = async (req, res) => {
     try {
-        const users = await User.findAll();
-        const leaderboardData = await Promise.all(
-            users.map(async (user) => {
-                const expenses = await Expense.findAll({ where: { userId: user.id } });
-                const totalExpense = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-                return { name: user.name, totalExpense };
-            })
-        );
-        leaderboardData.sort((a, b) => b.totalExpense - a.totalExpense);
+        // const users = await User.findAll();
+        // const leaderboardData = await Promise.all(
+        //     users.map(async (user) => {
+        //         const expenses = await Expense.findAll({ where: { userId: user.id } });
+        //         const totalExpense = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        //         return { name: user.name, totalExpense };
+        //     })
+        // );
+        // leaderboardData.sort((a, b) => b.totalExpense - a.totalExpense);
+        const leaderboardData = await User.findAll({
+            attributes: ['id', 'name',  [Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('Expenses.amount')), 0), 'totalExpense']],
+            include: [
+                {
+                    model: Expense,
+                    attributes: [],
+                },
+            ],
+            group: ['User.id'], 
+            order: [['totalExpense', 'DESC']],
+        });
         res.status(200).json(leaderboardData);
     } catch (err) {
         res.status(500).json({ error: err.message });

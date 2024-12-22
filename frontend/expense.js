@@ -143,7 +143,6 @@ showLeaderboardButton.addEventListener("click", () => {
 async function fetchLeaderboard() {
     await axios.get("http://localhost:3000/premium/leaderboard", { headers: { Authorization: token } })
         .then((res) => {
-            console.log(res.data);
             renderLeaderboard(res.data);
         }).catch((err) => {
             console.log(err);
